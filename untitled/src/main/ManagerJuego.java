@@ -60,9 +60,9 @@ public class ManagerJuego {
         minoActual.setXY(MINO_START_X, MINO_START_Y);
         minoSiguiente = randomMino();
         minoSiguiente.setXY(SIGUINTE_START_X, SIGUINTE_START_Y);
-        musica = new Musica("C:\\UTNprogramacion\\EXTRA\\Games\\Tetris\\untitled\\src\\sonidos\\Cancion del Tetris (Original Song) con Teclado..wav");
-        eliminarLinea = new Musica("src/sonidos/eliminarLinea.wav");
-        pasarNivel = new Musica("src/sonidos/pasarNivel.wav");
+        musica = new Musica("untitled/src/sonidos/Cancion del Tetris (Original Song) con Teclado..wav");
+        eliminarLinea = new Musica("untitled/src/sonidos/eliminarLinea.wav");
+        pasarNivel = new Musica("untitled/src/sonidos/pasarNivel.wav");
     }
 
     private Mino randomMino() {
@@ -120,13 +120,13 @@ public class ManagerJuego {
             minoActual.update();
         }
 
+
     }
 
     public void dibujar(Graphics2D g2) {
-        g2.setColor(Color.white);
+        g2.setColor(Color.YELLOW);
         g2.setStroke(new BasicStroke(4f));
         g2.drawRect(left_x - 4, top_y - 4, ANCHO + 8, ALTO + 8);
-
         int x = right_x + 100;
         int y = bottom_y - 200;
 

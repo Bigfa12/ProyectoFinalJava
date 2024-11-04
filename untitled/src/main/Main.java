@@ -8,11 +8,16 @@ public class Main {
         //Crear ventana.
         JFrame window = new JFrame("Tetris");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         window.setResizable(false);
 
         //Agrego el PanelJuego a la ventana.
         PanelJuego pj = new PanelJuego();
-        window.add(pj);
+        PantallaGameOver pg = new PantallaGameOver();
+        window.add(pj,"Juego");
+        window.add(pg,"Game Over");
+
+
         //Pack hace que el PanelJuego sea el tamaño de la ventana.
         window.pack();
 

@@ -76,36 +76,61 @@ public class Mino implements DireccionInteface {
 
     ;
 
-    public void verificarColisiones(Block[] bloques) {
+    public void colisionMovimiento() {
         colisionIzquierda = false;
         colisionDerecha = false;
         colisionAbajo = false;
 
-        for (Block bloque : bloques) {
-            if (bloque.x <= ManagerJuego.left_x) {
+        colisionBloquesEstaticos();
+
+        //Pared Izquierda
+        for (int i = 0; i < b.length; i++) {
+            if (b[i].x == ManagerJuego.left_x) {
                 colisionIzquierda = true;
             }
-            if ((bloque.x + Block.SIZE) >= ManagerJuego.right_x) {
+        }
+        //Pared Derecha
+        for (int i = 0; i < b.length; i++) {
+            if ((b[i].x + Block.SIZE) == ManagerJuego.right_x) {
                 colisionDerecha = true;
             }
-            if ((bloque.y + Block.SIZE) >= ManagerJuego.bottom_y) {
+        }
+        //Piso
+        for (int i = 0; i < b.length; i++) {
+            if ((b[i].y + Block.SIZE) >= ManagerJuego.bottom_y) {
                 colisionAbajo = true;
             }
-
-            if (colisionIzquierda && colisionDerecha && colisionAbajo) {
-                break; // Si todas las colisiones están detectadas, se puede salir del bucle
-            }
         }
-    }
 
-    public void colisionMovimiento() {
-        verificarColisiones(b); // Verificamos colisiones con los bloques actuales
-        colisionBloquesEstaticos(); // Verificamos colisión con bloques estáticos
+
     }
 
     public void colisionRotacion() {
-        verificarColisiones(tempB); // Verificamos colisiones con los bloques temporales para rotación
-        colisionBloquesEstaticos(); // Verificamos colisión con bloques estáticos
+        colisionIzquierda = false;
+        colisionDerecha = false;
+        colisionAbajo = false;
+
+        //Pared Izquierda
+        for (int i = 0; i < b.length; i++) {
+            if (tempB[i].x < ManagerJuego.left_x) {
+                colisionIzquierda = true;
+
+            }
+        }
+        //Pared Derecha
+        for (int i = 0; i < b.length; i++) {
+            if ((tempB[i].x + Block.SIZE) > ManagerJuego.right_x) {
+                colisionDerecha = true;
+
+            }
+        }
+        //Piso
+        for (int i = 0; i < b.length; i++) {
+            if ((tempB[i].y + Block.SIZE) > ManagerJuego.bottom_y) {
+                colisionAbajo = true;
+
+            }
+        }
     }
 
     private void colisionBloquesEstaticos() {

@@ -14,6 +14,8 @@ public class PanelJuego extends JPanel implements Runnable {
     Thread threadJuego;
     ManagerJuego mj;
     Inputs inputs = new Inputs();
+    private JPanel panel;
+
 
 
     public PanelJuego() {
@@ -24,6 +26,7 @@ public class PanelJuego extends JPanel implements Runnable {
         //Anulo cualquier tipo de layout por default.
         this.setLayout(null);
         mj = new ManagerJuego();
+
         //Implementar Inputs
         this.addKeyListener(new Inputs());
         this.setFocusable(true);
@@ -55,12 +58,18 @@ public class PanelJuego extends JPanel implements Runnable {
                 repaint();
                 delta--;
             }
+            if (mj.isJuegoTerminado()){
+
+            }
         }
     }
 
     public void update() {
         if (inputs.isKSpace() == false && mj.isJuegoTerminado() == false) {
             mj.update();
+        }
+        if (mj.isJuegoTerminado()) {
+
         }
 
     }
@@ -70,6 +79,9 @@ public class PanelJuego extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
         mj.dibujar(g2);
+    }
+    public void cambiarAGameOver(){
+
     }
 
 
