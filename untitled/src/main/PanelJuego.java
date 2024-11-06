@@ -3,86 +3,80 @@ package main;
 import javax.swing.*;
 import java.awt.*;
 
-
 public class PanelJuego extends JPanel implements Runnable {
 
-    //Seteo el ancho y alto del PanelJuego.
     public static final int ANCHO = 1280;
     public static final int ALTO = 720;
-    final int FPS = 60;
-    //Uso thread para poder hacer el GameLoop.
-    Thread threadJuego;
-    ManagerJuego mj;
-    Inputs inputs = new Inputs();
-    private JPanel panel;
+    private static final int FPS = 60;
 
+    private final JPanel mainPanel;
+    private final ManagerJuego mj;
+    private final Inputs inputs = new Inputs();
+    private Thread threadJuego;
+    private int contador = 0;
 
-
-    public PanelJuego() {
-        //Configuracion del Panel.
+    public PanelJuego(JPanel mainPanel) {
+        this.mainPanel = mainPanel;
 
         this.setPreferredSize(new Dimension(ANCHO, ALTO));
         this.setBackground(Color.BLACK);
-        //Anulo cualquier tipo de layout por default.
         this.setLayout(null);
+
         mj = new ManagerJuego();
 
-        //Implementar Inputs
-        this.addKeyListener(new Inputs());
+        this.addKeyListener(inputs);
         this.setFocusable(true);
         this.requestFocusInWindow();
+
 
     }
 
     public void lanzarJuego() {
         threadJuego = new Thread(this);
-        //El metodo start() llama automaticamente al metodo run().
         threadJuego.start();
     }
 
     @Override
     public void run() {
-
-        //Loop de juego.
         double dibujarIntervalo = 1000000000 / FPS;
         double delta = 0;
         double lastTime = System.nanoTime();
         double currentTime;
+
         while (threadJuego != null) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / dibujarIntervalo;
             lastTime = currentTime;
+
             if (delta >= 1) {
-                //Esto se llama 60 veces x seg.
                 update();
                 repaint();
                 delta--;
             }
-            if (mj.isJuegoTerminado()){
-
-            }
         }
     }
 
-    public void update() {
-        if (inputs.isKSpace() == false && mj.isJuegoTerminado() == false) {
+    private void update() {
+        if (!inputs.isKSpace() && !mj.isJuegoTerminado()) {
             mj.update();
+        } else if (mj.isJuegoTerminado()) {
+            cambiarAGameOver();
         }
-        if (mj.isJuegoTerminado()) {
-
-        }
-
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    private void cambiarAGameOver() {
+        if (contador > 200 || inputs.isKSpace()) {
+            CardLayout cl = (CardLayout) (mainPanel.getLayout());
+            cl.show(mainPanel, "GameOver");
+        } else {
+            contador++;
+        }
+    }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         mj.dibujar(g2);
     }
-    public void cambiarAGameOver(){
-
-    }
-
-
 }

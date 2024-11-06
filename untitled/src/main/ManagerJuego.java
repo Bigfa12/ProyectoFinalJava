@@ -237,4 +237,8 @@ public class ManagerJuego {
     public boolean isJuegoTerminado() {
         return juegoTerminado;
     }
+
+    public int getScore() {
+        return score;
+    }
 }

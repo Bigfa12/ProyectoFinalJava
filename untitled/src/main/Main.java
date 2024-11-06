@@ -1,34 +1,40 @@
 package main;
 
-
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
-        //Crear ventana.
+        SwingUtilities.invokeLater(Main::crearVentanaPrincipal);
+    }
+
+    private static void crearVentanaPrincipal() {
+        // Crear ventana
         JFrame window = new JFrame("Tetris");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         window.setResizable(false);
 
-        //Agrego el PanelJuego a la ventana.
-        PanelJuego pj = new PanelJuego();
-        PantallaGameOver pg = new PantallaGameOver();
-        window.add(pj,"Juego");
-        window.add(pg,"Game Over");
+        JPanel mainPanel = new JPanel(new CardLayout());
 
+        // Agregar el PanelJuego
+        PanelJuego panelJuego = new PanelJuego(mainPanel);
+        PantallaGameOver pantallaGameOver = new PantallaGameOver();
+         mainPanel.add(panelJuego, "Juego");
+        mainPanel.add(pantallaGameOver, "GameOver");
 
-        //Pack hace que el PanelJuego sea el tamaño de la ventana.
+        window.add(mainPanel);
+        // Ajustar el tamaño de la ventana al contenido
         window.pack();
 
-        pj.lanzarJuego();
+        // Inicializar el juego
+        try {
+            panelJuego.lanzarJuego();
+        } catch (Exception e) {
+            System.err.println("Error al lanzar el juego: " + e.getMessage());
+        }
 
-
-        //Al tener null, Windows no busca un lugar en especifico donde abrir la ventana,
-        //sino que la abre en el medio.
+        // Centrar la ventana en la pantalla
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-
-
     }
 }
