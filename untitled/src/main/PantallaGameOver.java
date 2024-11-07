@@ -68,14 +68,14 @@ public class PantallaGameOver extends JPanel {
         mainPanel.add(scoreLabel);
 
         // Acción del botón "Aceptar"
-        acceptButton.addActionListener(new ActionListener() {````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
-            @Override````
+        acceptButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (!nameField.getText().equals("")) {`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+                    if (!nameField.getText().equals("")) {
 
 
-                    }else{`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+                    }else{
                         throw new NombreVacioExeption();
                     }
                 }catch (NombreVacioExeption ex){
