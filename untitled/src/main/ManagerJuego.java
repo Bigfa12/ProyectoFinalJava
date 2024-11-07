@@ -35,12 +35,13 @@ public class ManagerJuego {
     public static int intervaloCaida = 60;
     private boolean juegoTerminado = false;
     //Score
-    private int score = 0;
+    public static int score = 0;
     private int lineasEliminadas = 0;
     private int level = 1;
     private Musica musica;
     private Musica eliminarLinea;
     private Musica pasarNivel;
+
 
     public ManagerJuego() {
         inputs = new Inputs();
@@ -60,9 +61,11 @@ public class ManagerJuego {
         minoActual.setXY(MINO_START_X, MINO_START_Y);
         minoSiguiente = randomMino();
         minoSiguiente.setXY(SIGUINTE_START_X, SIGUINTE_START_Y);
-        musica = new Musica("untitled/src/sonidos/Cancion del Tetris (Original Song) con Teclado..wav");
-        eliminarLinea = new Musica("untitled/src/sonidos/eliminarLinea.wav");
-        pasarNivel = new Musica("untitled/src/sonidos/pasarNivel.wav");
+        //  musica = new Musica("untitled/src/sonidos/Cancion del Tetris (Original Song) con Teclado..wav");
+        //  eliminarLinea = new Musica("untitled/src/sonidos/eliminarLinea.wav");
+        //  pasarNivel = new Musica("untitled/src/sonidos/pasarNivel.wav");
+
+
     }
 
     private Mino randomMino() {
@@ -96,7 +99,7 @@ public class ManagerJuego {
 
     public void update() {
         //Verificar si el Mino esta activo.
-        musica.play();
+        // musica.play();
         if (minoActual.isActive() == false) {
             //Si el mino no esta activo lo pongo en la lista de bloques estaticos.
             bloquesEstaticos.add(minoActual.b[0]);
@@ -106,6 +109,7 @@ public class ManagerJuego {
 
             if (minoActual.b[0].x == MINO_START_X && minoActual.b[0].y == MINO_START_Y) {
                 juegoTerminado = true;
+                GameData.setScore(score);
             }
 
             minoActual.setActive(false);
@@ -171,7 +175,7 @@ public class ManagerJuego {
         } else if (inputs.isKSpace()) {
             x = left_x + 70;
             y = top_y + 320;
-            g2.drawString("Pausa", x+35, y);
+            g2.drawString("Pausa", x + 35, y);
         }
     }
 
@@ -198,17 +202,17 @@ public class ManagerJuego {
                         }
                     }
                     lineasEliminadas++;
-                    eliminarLinea.playUNAVEZ();
+                    //eliminarLinea.playUNAVEZ();
 
 
                     cuentaLineas++;
 
                     if (lineasEliminadas % 10 == 0 && intervaloCaida > 1) {
                         level++;
-                        if (intervaloCaida > 10){
+                        if (intervaloCaida > 10) {
                             intervaloCaida += 10;
-                        }else{
-                            intervaloCaida-=1;
+                        } else {
+                            intervaloCaida -= 1;
                         }
                     }
 
@@ -227,7 +231,7 @@ public class ManagerJuego {
             }
         }
 
-        if (cuentaLineas > 0){
+        if (cuentaLineas > 0) {
             int scoreLinea = 10 * level;
             score += scoreLinea * cuentaLineas;
         }
@@ -241,4 +245,6 @@ public class ManagerJuego {
     public int getScore() {
         return score;
     }
+
+
 }

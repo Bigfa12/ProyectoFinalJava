@@ -1,28 +1,33 @@
 package main;
 
+import Exeption.NombreRepetidoExeption;
 import Exeption.NombreVacioExeption;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.channels.ScatteringByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PantallaGameOver extends JPanel {
 
     private ManagerJuego managerJuego;
+
     private String nombre;
+
     private List<Jugador> jugadores;
 
+    private int puntos;
 
     public PantallaGameOver() {
         this.setPreferredSize(new Dimension(PanelJuego.ANCHO, PanelJuego.ALTO));
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
 
-        managerJuego = new ManagerJuego();
         jugadores = new ArrayList<>();
+
 
         // Panel principal con borde y color de fondo
         JPanel mainPanel = new JPanel();
@@ -60,7 +65,8 @@ public class PantallaGameOver extends JPanel {
         mainPanel.add(acceptButton);
 
         // Etiqueta para mostrar la puntuación
-        JLabel scoreLabel = new JLabel("Tu puntuacion: " + managerJuego.getScore());
+
+        JLabel scoreLabel = new JLabel("Tu puntuacion: " + GameData.getScore());
         scoreLabel.setForeground(Color.WHITE);
         scoreLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -68,22 +74,38 @@ public class PantallaGameOver extends JPanel {
         mainPanel.add(scoreLabel);
 
         // Acción del botón "Aceptar"
-        acceptButton.addActionListener(new ActionListener() {````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
-            @Override````
+        acceptButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
+                nombre = nameField.getText();
+                Jugador j = new Jugador(nombre, GameData.getScore());
                 try {
-                    if (!nameField.getText().equals("")) {`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+                    if (!nameField.getText().equals("")) {
+                        if (!estaRepetido(j)) {
 
+                        } else {
+                            throw new NombreRepetidoExeption(nombre);
+                        }
 
-                    }else{`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+                    } else {
                         throw new NombreVacioExeption();
                     }
-                }catch (NombreVacioExeption ex){
-                    ex.printStackTrace();
+                } catch (NombreRepetidoExeption ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                } catch (NombreVacioExeption ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+
                 }
             }
         });
+    }
 
-
+    public boolean estaRepetido(Jugador j) {
+        for (Jugador jugador : jugadores) {
+            if (jugador.getNombre().equals(j.getNombre())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

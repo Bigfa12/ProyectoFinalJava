@@ -66,6 +66,8 @@ public class PanelJuego extends JPanel implements Runnable {
 
     private void cambiarAGameOver() {
         if (contador > 200 || inputs.isKSpace()) {
+            PantallaGameOver pantallaGameOver = new PantallaGameOver();
+            mainPanel.add(pantallaGameOver, "GameOver");
             CardLayout cl = (CardLayout) (mainPanel.getLayout());
             cl.show(mainPanel, "GameOver");
         } else {

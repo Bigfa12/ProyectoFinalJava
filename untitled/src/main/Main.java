@@ -18,9 +18,9 @@ public class Main {
 
         // Agregar el PanelJuego
         PanelJuego panelJuego = new PanelJuego(mainPanel);
-        PantallaGameOver pantallaGameOver = new PantallaGameOver();
-         mainPanel.add(panelJuego, "Juego");
-        mainPanel.add(pantallaGameOver, "GameOver");
+
+        mainPanel.add(panelJuego, "Juego");
+
 
         window.add(mainPanel);
         // Ajustar el tamaño de la ventana al contenido
