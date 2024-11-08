@@ -3,9 +3,13 @@ package main;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Collections;
+
+
 public class Jugador {
     private String nombre;
     private int puntos;
+    private Scores scores;
 
     public Jugador() {
     }
@@ -36,6 +40,14 @@ public class Jugador {
 
     public void setPuntos(int puntos) {
         this.puntos = puntos;
+    }
+
+    public Scores getScores() {
+        return scores;
+    }
+
+    public void setScores(Scores scores) {
+        this.scores = scores;
     }
 
     @Override

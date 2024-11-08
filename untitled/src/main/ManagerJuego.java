@@ -164,10 +164,11 @@ public class ManagerJuego {
         ArrayList<Jugador>jugadors = JSONUtiles.jugadorFromJSON("tetrisData");
         int y2=top_y;//y2 seria el "y" principal, que luego se va a aumentar en cada nueva iteracion
         int lineHeight = 20; // espaciado entre lineas
-        for (int i = 0; i < jugadors.size(); i++) {
-            Jugador j = jugadors.get(i);
-            String textoJugador = j.getNombre() + ", " + j.getPuntos() + " pts"; // stuve que cambiarlo y hacer cada player individualmente pq sino era una linea gigante en un momento
-            g2.drawString(textoJugador, left_x-420, y2); //se dibuja cada txt de jugador
+        if (jugadores.size() >= 10) {
+            for (int i = 0; i <= 9; i++) {
+            Jugador j = jugadores.get(i);
+            String textoJugador = (i+1 + "-") + j.getNombre() + ", " + j.getPuntos() + " pts"; // stuve que cambiarlo y hacer cada player individualmente pq sino era una linea gigante en un momento
+            g2.drawString(textoJugador, left_x-420, y2+80); //se dibuja cada txt de jugador
             y2+=lineHeight;//y se aumenta y en cada iteracion para el espaciado
         }
 

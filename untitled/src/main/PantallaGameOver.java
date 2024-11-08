@@ -3,25 +3,19 @@ package main;
 import Exeption.NombreRepetidoExeption;
 import Exeption.NombreVacioExeption;
 import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.channels.ScatteringByteChannel;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class PantallaGameOver extends JPanel {
 
     private ManagerJuego managerJuego;
-
     private String nombre;
-
-
-    private List<Jugador> jugadores;
-
+    private ArrayList<Jugador> jugadores;
     private int puntos;
 
     public PantallaGameOver() {
@@ -30,7 +24,6 @@ public class PantallaGameOver extends JPanel {
         this.setLayout(new BorderLayout());
 
         jugadores = new ArrayList<>();
-
 
         // Panel principal con borde y color de fondo
         JPanel mainPanel = new JPanel();
@@ -61,7 +54,6 @@ public class PantallaGameOver extends JPanel {
         mainPanel.add(Box.createVerticalStrut(10));
         nameField.setEnabled(true);
         mainPanel.add(nameField);
-        SwingUtilities.invokeLater(() -> nameField.requestFocusInWindow());
 
         // Botón "Aceptar"
         JButton acceptButton = new JButton("Aceptar");
@@ -70,7 +62,6 @@ public class PantallaGameOver extends JPanel {
         mainPanel.add(acceptButton);
 
         // Etiqueta para mostrar la puntuación
-
         JLabel scoreLabel = new JLabel("Tu puntuacion: " + GameData.getScore());
         scoreLabel.setForeground(Color.WHITE);
         scoreLabel.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -83,50 +74,61 @@ public class PantallaGameOver extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 nombre = nameField.getText();
-                Jugador j = new Jugador(nombre, GameData.getScore());
-                try {
-                    if (!nameField.getText().equals("")) {
-                        if (!estaRepetido(j)) {
-                            //si el jugador no esta repetido, carga en el arreglo todos los jugadores del archivo, luego añade al nuevo jugador y sobreescribe el archivo
-                            jugadores = JSONUtiles.jugadorFromJSON("tetrisData");
-                            jugadores.add(j);
-                            JSONUtiles.uploadJSON(toJSONArray(),"tetrisData");
-                        } else {
-                            throw new NombreRepetidoExeption(nombre);
-                        }
+                Jugador jugador = new Jugador(nombre, GameData.getScore());
 
-                    } else {
+                try {
+                    if (nombre.isEmpty()) {
                         throw new NombreVacioExeption();
                     }
-                } catch (NombreRepetidoExeption ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
-                } catch (NombreVacioExeption ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                     if (!estaRepetido(jugador)) {
+                         jugadores.add(jugador);
+                         clasificarJugadores(jugadores,jugador);
 
+                    }else {
+                         throw new NombreRepetidoExeption(nombre);
+                     }
+
+                } catch (NombreRepetidoExeption | NombreVacioExeption ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
                 }
             }
         });
     }
 
-    public boolean estaRepetido(Jugador j) {
-        for (Jugador jugador : jugadores) {
-            if (jugador.getNombre().equals(j.getNombre())) {
+    public boolean estaRepetido(Jugador jugador) {
+        for (Jugador j : jugadores) {
+            if (j.getNombre().equals(jugador.getNombre())) {
                 return true;
             }
         }
         return false;
     }
 
-    ///pasar todos los jugadores a un JSONarray
-
-    public JSONArray toJSONArray(){
+    // Convierte todos los jugadores a un JSONArray
+    public JSONArray toJSONArray() {
         JSONArray jsonArray = new JSONArray();
-        for (Jugador jugador : jugadores){
-            jsonArray.put(jugador.jugadorToJSON() );
+        for (Jugador jugador : jugadores) {
+            jsonArray.put(jugador.jugadorToJSON());
         }
         return jsonArray;
     }
+    public void clasificarJugadores(List<Jugador> jugadores,Jugador jugador){
+        if (!jugadores.isEmpty()) {
+            jugadores.sort(Comparator.comparingInt(Jugador::getPuntos).reversed());
 
 
+            // Clasificar los puntajes en TOPSCORE, REGULARSCORE, LOWSCORE
+            for (int i = 0; i < jugadores.size(); i++) {
+                if (i < 3) {
+                    jugadores.get(i).setScores(Scores.TOPSCORE);
+                } else if (i < 6) {
+                    jugadores.get(i).setScores(Scores.REGULARSCORE);
+                } else {
+                    jugadores.get(i).setScores(Scores.LOWSCORE);
+                }
+            }
+            JSONUtiles.uploadJSON(toJSONArray(), "tetrisData");
+        }
 
+    }
 }
