@@ -45,6 +45,8 @@ public class ManagerJuego {
 
     public ManagerJuego() {
         inputs = new Inputs();
+        ArrayList<Jugador> jugadors= JSONUtiles.jugadorFromJSON("tetrisData");
+
 
         left_x = (PanelJuego.ANCHO / 2) - (ANCHO / 2);
         right_x = left_x + ANCHO;
@@ -127,6 +129,9 @@ public class ManagerJuego {
 
     }
 
+
+
+
     public void dibujar(Graphics2D g2) {
         g2.setColor(Color.YELLOW);
         g2.setStroke(new BasicStroke(4f));
@@ -148,6 +153,27 @@ public class ManagerJuego {
         g2.drawString("Lineas: " + lineasEliminadas, x, y);
         y += 70;
         g2.drawString("Puntos: " + score, x, y);
+
+
+        ///dibujar ScoreBoard
+        g2.drawRect(left_x-440, top_y, 400, 500);
+        g2.setFont(new Font("Arial", Font.CENTER_BASELINE, 30));
+        g2.drawString("SCOREBOARD", left_x-420, top_y+40);
+        g2.setFont(new Font("Arial", Font.PLAIN, 15));
+       ///insercion de datos del archivo al scoreboard
+        ArrayList<Jugador>jugadors = JSONUtiles.jugadorFromJSON("tetrisData");
+        int y2=top_y;//y2 seria el "y" principal, que luego se va a aumentar en cada nueva iteracion
+        int lineHeight = 20; // espaciado entre lineas
+        for (int i = 0; i < jugadors.size(); i++) {
+            Jugador j = jugadors.get(i);
+            String textoJugador = j.getNombre() + ", " + j.getPuntos() + " pts"; // stuve que cambiarlo y hacer cada player individualmente pq sino era una linea gigante en un momento
+            g2.drawString(textoJugador, left_x-420, y2); //se dibuja cada txt de jugador
+            y2+=lineHeight;//y se aumenta y en cada iteracion para el espaciado
+        }
+
+
+
+
 
 
         //Dibujar el Mino.

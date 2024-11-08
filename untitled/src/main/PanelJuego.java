@@ -26,7 +26,7 @@ public class PanelJuego extends JPanel implements Runnable {
 
         this.addKeyListener(inputs);
         this.setFocusable(true);
-        this.requestFocusInWindow();
+        SwingUtilities.invokeLater(this::requestFocusInWindow);
 
 
     }
@@ -70,6 +70,8 @@ public class PanelJuego extends JPanel implements Runnable {
             mainPanel.add(pantallaGameOver, "GameOver");
             CardLayout cl = (CardLayout) (mainPanel.getLayout());
             cl.show(mainPanel, "GameOver");
+            threadJuego = null; // tuve que hacerlo null porque si no nunca dejaba escribir el nombre en el game over
+            contador = 0;
         } else {
             contador++;
         }

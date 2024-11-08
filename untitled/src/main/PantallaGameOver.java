@@ -2,6 +2,8 @@ package main;
 
 import Exeption.NombreRepetidoExeption;
 import Exeption.NombreVacioExeption;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +18,7 @@ public class PantallaGameOver extends JPanel {
     private ManagerJuego managerJuego;
 
     private String nombre;
+
 
     private List<Jugador> jugadores;
 
@@ -56,7 +59,9 @@ public class PantallaGameOver extends JPanel {
         JTextField nameField = new JTextField(20);
         nameField.setMaximumSize(new Dimension(200, 30));
         mainPanel.add(Box.createVerticalStrut(10));
+        nameField.setEnabled(true);
         mainPanel.add(nameField);
+        SwingUtilities.invokeLater(() -> nameField.requestFocusInWindow());
 
         // Botón "Aceptar"
         JButton acceptButton = new JButton("Aceptar");
@@ -82,7 +87,10 @@ public class PantallaGameOver extends JPanel {
                 try {
                     if (!nameField.getText().equals("")) {
                         if (!estaRepetido(j)) {
-
+                            //si el jugador no esta repetido, carga en el arreglo todos los jugadores del archivo, luego añade al nuevo jugador y sobreescribe el archivo
+                            jugadores = JSONUtiles.jugadorFromJSON("tetrisData");
+                            jugadores.add(j);
+                            JSONUtiles.uploadJSON(toJSONArray(),"tetrisData");
                         } else {
                             throw new NombreRepetidoExeption(nombre);
                         }
@@ -108,4 +116,17 @@ public class PantallaGameOver extends JPanel {
         }
         return false;
     }
+
+    ///pasar todos los jugadores a un JSONarray
+
+    public JSONArray toJSONArray(){
+        JSONArray jsonArray = new JSONArray();
+        for (Jugador jugador : jugadores){
+            jsonArray.put(jugador.jugadorToJSON() );
+        }
+        return jsonArray;
+    }
+
+
+
 }

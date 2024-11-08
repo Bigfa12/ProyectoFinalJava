@@ -1,12 +1,25 @@
 package main;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class Jugador {
     private String nombre;
     private int puntos;
 
+    public Jugador() {
+    }
+
     public Jugador(String nombre, int puntos) {
         this.nombre = nombre;
         this.puntos = puntos;
+    }
+
+    public JSONObject jugadorToJSON(){
+        JSONObject dataJSON = new JSONObject();
+        dataJSON.put("nombre", nombre);
+        dataJSON.put("puntos", puntos);
+        return dataJSON;
     }
 
     public String getNombre() {
@@ -27,9 +40,13 @@ public class Jugador {
 
     @Override
     public String toString() {
-        return "Jugador{" +
-                "nombre='" + nombre + '\'' +
+        return "[nombre='" + nombre + '\'' +
                 ", puntos=" + puntos +
-                '}';
+                "]--";
     }
+
+
+
+
+
 }
