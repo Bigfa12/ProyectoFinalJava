@@ -18,12 +18,12 @@ public class PantallaGameOver extends JPanel {
     private ArrayList<Jugador> jugadores;
     private int puntos;
 
-    public PantallaGameOver() {
+    public PantallaGameOver(ManagerJuego mj) {
         this.setPreferredSize(new Dimension(PanelJuego.ANCHO, PanelJuego.ALTO));
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
-
-        jugadores = new ArrayList<>();
+        managerJuego = mj;
+        jugadores = managerJuego.getJugadores();
 
         // Panel principal con borde y color de fondo
         JPanel mainPanel = new JPanel();
@@ -110,6 +110,7 @@ public class PantallaGameOver extends JPanel {
         for (Jugador jugador : jugadores) {
             jsonArray.put(jugador.jugadorToJSON());
         }
+        System.out.println(jsonArray.toString());
         return jsonArray;
     }
     public void clasificarJugadores(List<Jugador> jugadores,Jugador jugador){

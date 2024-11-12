@@ -17,4 +17,7 @@ public class Block extends Rectangle {
         g2.fillRect(x + margen, y + margen, SIZE - (margen * 2), SIZE - (margen * 2));
     }
 
+
+
+
 }

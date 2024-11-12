@@ -7,8 +7,11 @@ package main;
 import mino.Block;
 import mino.Mino;
 import mino.forms.*;
+import org.json.JSONArray;
 
+import javax.sound.sampled.Clip;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -35,17 +38,28 @@ public class ManagerJuego {
     public static int intervaloCaida = 60;
     private boolean juegoTerminado = false;
     //Score
-    public static int score = 0;
+    private static int score = 0;
     private int lineasEliminadas = 0;
     private int level = 1;
-    private Musica musica;
-    private Musica eliminarLinea;
-    private Musica pasarNivel;
-
+    //Musica
+    private Musica<Clip> musica;
+    //Jugadores
+    private ArrayList<Jugador> jugadores;
+    private JSONArray jsonJugadores;
+    private File file;
 
     public ManagerJuego() {
         inputs = new Inputs();
-        ArrayList<Jugador> jugadors= JSONUtiles.jugadorFromJSON("tetrisData");
+        jugadores = new ArrayList<>();
+        jsonJugadores = new JSONArray();
+        file = new File("tetrisData.json");
+
+        System.out.println(file.exists());
+
+        if (file.exists()) {
+            jugadores = JSONUtiles.jugadorFromJSON("tetrisData");
+            System.out.println(jugadores.toString());
+        }
 
 
         left_x = (PanelJuego.ANCHO / 2) - (ANCHO / 2);
@@ -63,11 +77,10 @@ public class ManagerJuego {
         minoActual.setXY(MINO_START_X, MINO_START_Y);
         minoSiguiente = randomMino();
         minoSiguiente.setXY(SIGUINTE_START_X, SIGUINTE_START_Y);
-        //  musica = new Musica("untitled/src/sonidos/Cancion del Tetris (Original Song) con Teclado..wav");
-        //  eliminarLinea = new Musica("untitled/src/sonidos/eliminarLinea.wav");
-        //  pasarNivel = new Musica("untitled/src/sonidos/pasarNivel.wav");
-
-
+        musica = new Musica<>();
+        musica.cargarAudio("musicaFondo","untitled/src/sonidos/Cancion del Tetris (Original Song) con Teclado..wav");
+        musica.cargarAudio("eliminarLinea","untitled/src/sonidos/eliminarLinea.wav");
+        musica.cargarAudio("pasarNivel","untitled/src/sonidos/pasarNivel.wav");
     }
 
     private Mino randomMino() {
@@ -101,7 +114,9 @@ public class ManagerJuego {
 
     public void update() {
         //Verificar si el Mino esta activo.
-        // musica.play();
+        musica.loop("musicaFondo");
+        
+
         if (minoActual.isActive() == false) {
             //Si el mino no esta activo lo pongo en la lista de bloques estaticos.
             bloquesEstaticos.add(minoActual.b[0]);
@@ -111,6 +126,7 @@ public class ManagerJuego {
 
             if (minoActual.b[0].x == MINO_START_X && minoActual.b[0].y == MINO_START_Y) {
                 juegoTerminado = true;
+                musica.stop("musicaFondo");
                 GameData.setScore(score);
             }
 
@@ -128,9 +144,6 @@ public class ManagerJuego {
 
 
     }
-
-
-
 
     public void dibujar(Graphics2D g2) {
         g2.setColor(Color.YELLOW);
@@ -161,7 +174,7 @@ public class ManagerJuego {
         g2.drawString("SCOREBOARD", left_x-420, top_y+40);
         g2.setFont(new Font("Arial", Font.PLAIN, 15));
        ///insercion de datos del archivo al scoreboard
-        ArrayList<Jugador>jugadors = JSONUtiles.jugadorFromJSON("tetrisData");
+
         int y2=top_y;//y2 seria el "y" principal, que luego se va a aumentar en cada nueva iteracion
         int lineHeight = 20; // espaciado entre lineas
         if (jugadores.size() >= 10) {
@@ -171,10 +184,14 @@ public class ManagerJuego {
             g2.drawString(textoJugador, left_x-420, y2+80); //se dibuja cada txt de jugador
             y2+=lineHeight;//y se aumenta y en cada iteracion para el espaciado
         }
-
-
-
-
+        }else{
+                for (int i = 0; i < jugadores.size(); i++){
+                    Jugador j = jugadores.get(i);
+                    String textoJugador = (i+1 + "-") + j.getNombre() + ", " + j.getPuntos() + " pts"; // stuve que cambiarlo y hacer cada player individualmente pq sino era una linea gigante en un momento
+                    g2.drawString(textoJugador, left_x-420, y2+80); //se dibuja cada txt de jugador
+                    y2+=lineHeight;//y se aumenta y en cada iteracion para el espaciado
+                }
+        }
 
 
         //Dibujar el Mino.
@@ -229,13 +246,15 @@ public class ManagerJuego {
                         }
                     }
                     lineasEliminadas++;
-                    //eliminarLinea.playUNAVEZ();
+                    musica.play("eliminarLinea");
+
 
 
                     cuentaLineas++;
 
                     if (lineasEliminadas % 10 == 0 && intervaloCaida > 1) {
                         level++;
+                        musica.play("pasarNivel");
                         if (intervaloCaida > 10) {
                             intervaloCaida += 10;
                         } else {
@@ -273,5 +292,8 @@ public class ManagerJuego {
         return score;
     }
 
+    public ArrayList<Jugador> getJugadores(){
+        return jugadores;
+    }
 
 }

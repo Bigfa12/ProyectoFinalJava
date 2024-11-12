@@ -21,7 +21,7 @@ public class JSONUtiles {
 
     public static void uploadJSON(JSONObject jsonObject, String archive){
         try{
-            BufferedWriter salida = new BufferedWriter(new FileWriter(archive+".json"));
+            BufferedWriter salida = new BufferedWriter(new FileWriter(archive + ".json"));
             salida.write(jsonObject.toString(4));
             salida.flush();
             salida.close();
@@ -53,14 +53,17 @@ public class JSONUtiles {
     public static ArrayList<Jugador> jugadorFromJSON(String nombreArchivo){
         JSONArray jsonArray = new JSONArray(downloadJSON(nombreArchivo));
         ArrayList<Jugador> jugadores= new ArrayList<Jugador>();
-        for(int i = 0; i < jsonArray.length(); i++){
-            JSONObject jugador = jsonArray.getJSONObject(i);
-            String nombre = jugador.getString("nombre");
-            int puntos = jugador.getInt("puntos");
-            Jugador j = new Jugador(nombre,puntos);
-            jugadores.add(j);
 
-        }
+            for (int i = 0; i < jsonArray.length(); i++) {
+                Jugador jugador1 = new Jugador();
+                JSONObject jugador = jsonArray.getJSONObject(i);
+                String nombre = jugador.getString("nombre");
+                int puntos = jugador.getInt("puntos");
+                jugador1.setNombre(nombre);
+                jugador1.setPuntos(puntos);
+                jugadores.add(jugador1);
+            }
+
         return jugadores;
     }
 

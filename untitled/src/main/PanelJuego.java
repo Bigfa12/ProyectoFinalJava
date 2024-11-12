@@ -61,16 +61,17 @@ public class PanelJuego extends JPanel implements Runnable {
             mj.update();
         } else if (mj.isJuegoTerminado()) {
             cambiarAGameOver();
+
         }
     }
 
     private void cambiarAGameOver() {
         if (contador > 200 || inputs.isKSpace()) {
-            PantallaGameOver pantallaGameOver = new PantallaGameOver();
+            PantallaGameOver pantallaGameOver = new PantallaGameOver(mj);
             mainPanel.add(pantallaGameOver, "GameOver");
             CardLayout cl = (CardLayout) (mainPanel.getLayout());
             cl.show(mainPanel, "GameOver");
-            threadJuego = null; // tuve que hacerlo null porque si no nunca dejaba escribir el nombre en el game over
+            threadJuego = null;// tuve que hacerlo null porque si no nunca dejaba escribir el nombre en el game over
             contador = 0;
         } else {
             contador++;

@@ -9,8 +9,8 @@ import java.awt.*;
 public class Mino implements DireccionInteface {
     public Block[] b = new Block[4];
     public Block[] tempB = new Block[4];
-    int autoDropCount = 0;
-    Inputs inputs;
+    private int autoDropCount = 0;
+    private Inputs inputs;
     private int direction = 1;//Puede haber 4 direcciones 1,2,3o4.
     private boolean colisionIzquierda = false, colisionDerecha = false, colisionAbajo = false;
     private boolean active = true;
@@ -135,27 +135,23 @@ public class Mino implements DireccionInteface {
 
     private void colisionBloquesEstaticos() {
         for (Block staticBlock : ManagerJuego.bloquesEstaticos) {
-            int staticX = staticBlock.x;
-            int staticY = staticBlock.y;
+            int staticBlockX = staticBlock.x;
+            int staticBlockY = staticBlock.y;
 
             for (Block movingBlock : b) {
                 // Verificar colisión de abajo
-                if (movingBlock.y + Block.SIZE == staticY && movingBlock.x == staticX) {
+                if (movingBlock.y + Block.SIZE == staticBlockY && movingBlock.x == staticBlockX) {
                     colisionAbajo = true;
                 }
                 // Verificar colisión izquierda
-                if (movingBlock.x - Block.SIZE == staticX && movingBlock.y == staticY) {
+                if (movingBlock.x - Block.SIZE == staticBlockX && movingBlock.y == staticBlockY) {
                     colisionIzquierda = true;
                 }
                 // Verificar colisión derecha
-                if (movingBlock.x + Block.SIZE == staticX && movingBlock.y == staticY) {
+                if (movingBlock.x + Block.SIZE == staticBlockX && movingBlock.y == staticBlockY) {
                     colisionDerecha = true;
                 }
 
-                // Si se detectaron todas las colisiones, podemos salir del bucle para optimizar
-                if (colisionAbajo && colisionIzquierda && colisionDerecha) {
-                    return;
-                }
             }
         }
     }
