@@ -6,7 +6,7 @@ import mino.Mino;
 import java.awt.*;
 import java.util.Arrays;
 
-public class Mino_L1 extends Mino {
+public class Mino_L1 extends Mino implements DireccionInteface{
     public Mino_L1() {
         create(Color.ORANGE);
     }

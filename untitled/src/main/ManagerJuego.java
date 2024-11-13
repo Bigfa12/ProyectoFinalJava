@@ -54,11 +54,8 @@ public class ManagerJuego {
         jsonJugadores = new JSONArray();
         file = new File("tetrisData.json");
 
-        System.out.println(file.exists());
-
         if (file.exists()) {
             jugadores = JSONUtiles.jugadorFromJSON("tetrisData");
-            System.out.println(jugadores.toString());
         }
 
 
@@ -172,7 +169,7 @@ public class ManagerJuego {
         g2.drawRect(left_x-440, top_y, 400, 500);
         g2.setFont(new Font("Arial", Font.CENTER_BASELINE, 30));
         g2.drawString("SCOREBOARD", left_x-420, top_y+40);
-        g2.setFont(new Font("Arial", Font.PLAIN, 15));
+        g2.setFont(new Font("Arial", Font.PLAIN, 20));
        ///insercion de datos del archivo al scoreboard
 
         int y2=top_y;//y2 seria el "y" principal, que luego se va a aumentar en cada nueva iteracion

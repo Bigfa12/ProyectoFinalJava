@@ -1,6 +1,7 @@
 package main;
 
 import Exeption.NombreRepetidoExeption;
+import Exeption.NombreTerminadoExeption;
 import Exeption.NombreVacioExeption;
 import org.json.JSONArray;
 import javax.swing.*;
@@ -17,6 +18,7 @@ public class PantallaGameOver extends JPanel {
     private String nombre;
     private ArrayList<Jugador> jugadores;
     private int puntos;
+    private boolean nombreTerminado;
 
     public PantallaGameOver(ManagerJuego mj) {
         this.setPreferredSize(new Dimension(PanelJuego.ANCHO, PanelJuego.ALTO));
@@ -77,6 +79,9 @@ public class PantallaGameOver extends JPanel {
                 Jugador jugador = new Jugador(nombre, GameData.getScore());
 
                 try {
+                    if (nombreTerminado == true){
+                        throw new NombreTerminadoExeption();
+                    }
                     if (nombre.isEmpty()) {
                         throw new NombreVacioExeption();
                     }
@@ -90,6 +95,8 @@ public class PantallaGameOver extends JPanel {
 
                 } catch (NombreRepetidoExeption | NombreVacioExeption ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage());
+                }catch (NombreTerminadoExeption ex){
+                    JOptionPane.showMessageDialog(null,ex.getMessage());
                 }
             }
         });

@@ -25,9 +25,6 @@ public class Mino_Square extends Mino {
         b[3].y = b[0].y + Block.SIZE;
     }
 
-    public void getDireccion1(){}
-    public void getDireccion2(){}
-    public void getDireccion3(){}
-    public void getDireccion4(){}
+
 
 }

@@ -6,7 +6,7 @@ import mino.forms.DireccionInteface;
 
 import java.awt.*;
 
-public class Mino implements DireccionInteface {
+public class Mino {
     public Block[] b = new Block[4];
     public Block[] tempB = new Block[4];
     private int autoDropCount = 0;
@@ -44,7 +44,7 @@ public class Mino implements DireccionInteface {
         this.activando = activando;
     }
 
-    public void activando(){
+    public void activando() {
         activandoContador++;
         if (activandoContador == 45) {
 
@@ -156,26 +156,20 @@ public class Mino implements DireccionInteface {
         }
     }
 
-
-    @Override
     public void getDireccion1() {
     }
 
-    @Override
     public void getDireccion2() {
     }
 
-    @Override
     public void getDireccion3() {
     }
 
-    @Override
     public void getDireccion4() {
     }
 
-
     public void update() {
-        if (activando){
+        if (activando) {
             activando();
         }
         //Controlar el Mino.

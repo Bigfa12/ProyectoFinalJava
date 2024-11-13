@@ -5,7 +5,7 @@ import mino.Mino;
 
 import java.awt.*;
 
-public class Mino_Bar extends Mino {
+public class Mino_Bar extends Mino implements DireccionInteface{
 
     public Mino_Bar() {
         create(Color.cyan);
